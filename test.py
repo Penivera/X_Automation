@@ -1,5 +1,6 @@
-from x import ReadFIle
-
-
-file= ReadFIle(login_file='login.csv',url_file='urls.json')
-print(file.login_data,file.Links)
+from Confirmation import TempMailAPI
+from settings import api_base_url
+mail = TempMailAPI(base_url=api_base_url)
+email =mail.create_custom_email
+print(email)
+code = mail.fetch_verification_code(email)

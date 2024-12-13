@@ -2,6 +2,7 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 import csv
 import json
 import os
+from Confirmation import TempMailAPI
 
 os.system('echo off')
 class ReadFIle:
@@ -40,15 +41,19 @@ def run(playwright: Playwright,login_info:tuple,links:list) -> Playwright:
             email_field = page.get_by_label("Phone, email, or username")
             email_field.fill(login_info[0])
             email_field.press("Enter")
-            confirmation = page.get_by_test_id("ocfEnterTextTextInput")
-            if confirmation.is_visible():
-                confirmation.fill(login_info[0])
-                confirmation.press("Enter")
             auth = page.locator('h2',has_text="Authenticate your account")
             if auth.is_visible():
                 input('press any key')
             page.get_by_label("Password", exact=True).fill(login_info[1])
             page.get_by_label("Password", exact=True).press("Enter")
+            confirmation = page.get_by_test_id("ocfEnterTextTextInput")
+            if confirmation.is_visible():
+                mail = TempMailAPI(login_info[0])
+                confirmation.fill(login_info[0])
+                code = mail.fetch_verification_code
+                #find identifier for Code
+                
+                confirmation.press("Enter")
             for i in range(len(links)):
                 page.goto(links[i])
                 reply_buttons = page.locator("button[data-testid='reply']")
