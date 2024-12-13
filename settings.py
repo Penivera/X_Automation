@@ -1,0 +1,1 @@
+api_base_url = "https://temp-mail-api3.p.rapidapi.com"

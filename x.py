@@ -2,7 +2,7 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 import csv
 import json
 import os
-import time
+from Confirmation import TempMailAPI
 
 os.system('echo off')
 
@@ -50,26 +50,19 @@ def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
             email_field.fill(login_info[0])
             time.sleep(2)
             email_field.press("Enter")
-            time.sleep(2)
-
-            confirmation = page.locator('span', has_text="Phone or email")
-            if confirmation.is_visible():
-                confirmation.fill(login_info[0])
-                time.sleep(2)
-                confirmation.press("Enter")
-                time.sleep(2)
-
-            auth = page.locator('h2', has_text="Authenticate your account")
+            auth = page.locator('h2',has_text="Authenticate your account")
             if auth.is_visible():
-                input('Press any key after authentication...')
-
-            password_field = page.get_by_label("Password", exact=True)
-            password_field.fill(login_info[1])
-            time.sleep(2)
-            password_field.press("Enter")
-            time.sleep(3)
-
-            # Navigate and comment on links
+                input('press any key')
+            page.get_by_label("Password", exact=True).fill(login_info[1])
+            page.get_by_label("Password", exact=True).press("Enter")
+            confirmation = page.get_by_test_id("ocfEnterTextTextInput")
+            if confirmation.is_visible():
+                mail = TempMailAPI(login_info[0])
+                confirmation.fill(login_info[0])
+                code = mail.fetch_verification_code
+                #find identifier for Code
+                
+                confirmation.press("Enter")
             for i in range(len(links)):
                 page.goto(links[i])
                 time.sleep(3)
