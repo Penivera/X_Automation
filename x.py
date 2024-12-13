@@ -40,7 +40,7 @@ def run(playwright: Playwright,login_info:tuple,links:list) -> Playwright:
             email_field = page.get_by_label("Phone, email, or username")
             email_field.fill(login_info[0])
             email_field.press("Enter")
-            confirmation = page.locator('span',has_text="Phone or email")
+            confirmation = page.get_by_test_id("ocfEnterTextTextInput")
             if confirmation.is_visible():
                 confirmation.fill(login_info[0])
                 confirmation.press("Enter")
