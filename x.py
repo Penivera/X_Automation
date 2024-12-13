@@ -70,6 +70,6 @@ def main():
     with sync_playwright() as playwright:
         for i in range(len(login_data)):
             run(playwright,login_data[i],URLs)
-            
+                
 if __name__ == '__main__':
     main()
