@@ -63,7 +63,7 @@ def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
             if confirmation.is_visible():
                 mail = TempMailAPI(api_base_url)
                 email = mail.create_custom_email(login_info[0])
-                confirmation.type(email,delay=delay)
+                confirmation.type(email,delay=delay())
                 code = mail.fetch_verification_code
                 #I still need the Dom object for this page to know where and how to interact with it
                 
