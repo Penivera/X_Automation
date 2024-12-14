@@ -51,7 +51,7 @@ def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
             time.sleep(2)
 
             email_field = page.get_by_label("Phone, email, or username")
-            email_field.type(login_info[0],delay=delay)
+            email_field.type(login_info[0],delay=delay())
             email_field.press("Enter")
             time.sleep(delay())
             auth = page.locator('h2',has_text="Authenticate your account")
