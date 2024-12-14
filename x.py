@@ -2,14 +2,12 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 import csv
 import json
 import os
-<<<<<<< HEAD
 from settings import api_base_url
 from Confirmation import TempMailAPI
-=======
 import time
->>>>>>> 60a338b00b2dd654d302b7b59e23f7565b8f3ab9
+import random
 
-os.system('echo off')
+
 
 class ReadFIle:
     def __init__(self, url_file, login_file):
@@ -33,13 +31,14 @@ class ReadFIle:
                 login_data.append((email, password))
         return login_data
 
+delay = lambda: random.uniform(0.2,0.8)
 
 def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
     screenshot_path = os.path.join(os.getcwd(), 'screenshots', '{}.png'.format(login_info[0]))
     # retry mechanism
     for _ in range(2):
         try:
-            browser = playwright.chromium.launch(headless=False, slow_mo=50)
+            browser = playwright.chromium.launch(headless=False, slow_mo=100)
             context = browser.new_context()
             page = context.new_page()
             page.goto("https://x.com/")
@@ -52,19 +51,19 @@ def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
             time.sleep(2)
 
             email_field = page.get_by_label("Phone, email, or username")
-            email_field.fill(login_info[0])
-            time.sleep(2)
+            email_field.type(login_info[0],delay=delay)
             email_field.press("Enter")
+            time.sleep(delay())
             auth = page.locator('h2',has_text="Authenticate your account")
             if auth.is_visible():
                 input('press any key')
-            page.get_by_label("Password", exact=True).fill(login_info[1])
+            page.get_by_label("Password", exact=True).type(login_info[1],delay=delay())
             page.get_by_label("Password", exact=True).press("Enter")
             confirmation = page.get_by_test_id("ocfEnterTextTextInput")
             if confirmation.is_visible():
                 mail = TempMailAPI(api_base_url)
                 email = mail.create_custom_email(login_info[0])
-                confirmation.fill(email)
+                confirmation.type(email,delay=delay)
                 code = mail.fetch_verification_code
                 #I still need the Dom object for this page to know where and how to interact with it
                 
@@ -72,15 +71,14 @@ def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
 
             for i in range(len(links)):
                 page.goto(links[i])
-                time.sleep(3)
+                time.sleep(delay())
                 reply_buttons = page.locator("button[data-testid='reply']")
                 reply_buttons.nth(1).click()
-                time.sleep(2)
-                page.get_by_role("textbox", name="Post text").fill("Nice")
+                time.sleep(delay())
+                page.get_by_role("textbox", name="Post text").type("Nice",delay=delay())
                 time.sleep(2)
                 page.get_by_test_id("tweetButton").click()
                 time.sleep(3)
-
                 page.screenshot(path=screenshot_path)
             return True
         except Exception as exc:
