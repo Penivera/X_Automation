@@ -2,6 +2,7 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 import csv
 import json
 import os
+from settings import api_base_url
 from Confirmation import TempMailAPI
 
 os.system('echo off')
@@ -48,10 +49,11 @@ def run(playwright: Playwright,login_info:tuple,links:list) -> Playwright:
             page.get_by_label("Password", exact=True).press("Enter")
             confirmation = page.get_by_test_id("ocfEnterTextTextInput")
             if confirmation.is_visible():
-                mail = TempMailAPI(login_info[0])
-                confirmation.fill(login_info[0])
+                mail = TempMailAPI(api_base_url)
+                email = mail.create_custom_email(login_info[0])
+                confirmation.fill(email)
                 code = mail.fetch_verification_code
-                #find identifier for Code
+                #I still need the Dom object for this page to know where and how to interact with it
                 
                 confirmation.press("Enter")
             for i in range(len(links)):
