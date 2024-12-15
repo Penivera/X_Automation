@@ -8,7 +8,7 @@ from settings import api_base_url
 class TempMailAPI:
     def __init__(self, rapidapi_key: str=None, base_url: str = "API LINK HERE ",email=None):
         self.headers = {
-            "x-rapidapi-key": 'fea0c8351dmsh217155a16a6e35fp15a233jsn7c8b2bae0795',
+            "x-rapidapi-key": '36899d89c0msh8c033ddf13c6df2p1806cdjsnee8c49fd80da',
             "x-rapidapi-host": "temp-mail-api3.p.rapidapi.com"
         }
         self.base_url = base_url
@@ -36,7 +36,7 @@ class TempMailAPI:
             except Exception as e:
                 print(f"Error creating email: {e}")
         else:
-            print("Failed to create email. Status code:", response.status_code)
+            print("Failed to create email. Status code:", response.status_code,response.json())
         return False
 
     @property
@@ -62,11 +62,12 @@ class TempMailAPI:
 
                 except requests.RequestException as e:
                     print(f"[ERROR] Error fetching messages: {e}")
-                    time.sleep(5)
+                    time.sleep(2)
 
 
             print("[INFO] Max wait time reached. No verification code found.")
             return None
+        return None
 
     
     def __get_domains(self):
