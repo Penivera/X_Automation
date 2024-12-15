@@ -19,7 +19,7 @@ class ReadFIle:
             return json.load(file)
 
     @property
-    def login_data(self) -> list:
+    def login_data(self) -> dict:
         login_data = []
         with open(self.login, 'r', newline='') as file:
             reader = csv.DictReader(file, fieldnames=self.headers, delimiter=',')
