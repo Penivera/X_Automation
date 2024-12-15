@@ -96,7 +96,7 @@ def run(playwright: Playwright, login_info: tuple, links: list) -> Playwright:
 
 def main():
     file_reading = ReadFIle(url_file='urls.json', login_file='login.csv')
-    login_data: list = file_reading.login_data
+    login_data: dict = file_reading.login_data
     URLs: list = file_reading.Links
     with sync_playwright() as playwright:
         for i in range(len(login_data)):
